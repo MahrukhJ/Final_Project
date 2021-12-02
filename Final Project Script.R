@@ -28,6 +28,9 @@ individuals in the lowest income quartile were significantly correlated with smo
 medical care, labor market conditions or income inequality. 
 
 'Data:'
+I am using the BRFSS2013 data downloaded from the class page. The data includes information on education, income, and various factors regarding health, which 
+are all relevant to my project. 
+
 attach(dat3)
 table(dat3$INCOME2, dat3$EDUCA)
 Analyzing the table that depicts income across education levels leads to the observation that as a persons level of education attained increases, 
