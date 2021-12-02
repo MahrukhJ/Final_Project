@@ -37,7 +37,10 @@ Analyzing the table that depicts income across education levels leads to the obs
 the larger the number of people who earn $75,000 or more, will be, for that category. Reasonably, higher education levels can lead to better 
 occupations and a healthier lifestyle, which can contribute to longer life expectancy.
 
-
+Since the data is very large, I will subset to include observations from New York only which results in 8979 observations. 
+> use_varb <- (X_STATE == "New York")
+> dat_use <- subset(dat3,use_varb)
+> attach(dat_use)
 
 
 
