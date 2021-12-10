@@ -1307,9 +1307,106 @@ model_attempt19 <- lm(LifeExpect1$Data ~ IDR2$Data + Poverty2$Data + MRent_500$D
 summary(model_attempt19)
 "Unemploy_Teen1$Data      -1.636e+00  1.306e+00  -1.253  0.21140"
 
+Youth Unemployment: Youth 20 to 24 years who are without a job and were actively seeking employment within the last four weeks.
+detach()
+attach(Youth_Unemployment_20_to_24_Years_)
+some_varb7 <- (TimeFrame >= 2014)
+Unemploy_Youth <- subset(Youth_Unemployment_20_to_24_Years_, some_varb7)
+detach(Youth_Unemployment_20_to_24_Years_)
+attach(Unemploy_Youth)
+some_varb8 <- (TimeFrame <= 2018)
+Unemploy_Youth1 <- subset(Unemploy_Youth, some_varb8)
+detach(Unemploy_Youth)
+attach(Unemploy_Youth1)
+
+model_attempt20 <- lm(LifeExpect1$Data ~ IDR2$Data + Poverty2$Data + MRent_500$Data + MRent_999$Data + MRent_1k$Data + MRent_1500k$Data + MRent_2k$Data + 
+                        UnER1$Data + Educ_nohs$Data + Educ_SC$Data + Educ_AD$Data + Educ_BD$Data + ConPov1$Data + Graduation_Rate$Data + Home_Own1$Data + 
+                        HH_Inc_100k$Data + HH_Inc_15k$Data + HH_Inc_200k$Data + HH_Inc_25k$Data + HH_Inc_50k$Data + HH_Inc_75k$Data + HH_Inc_Under15k$Data 
+                      + Internet_Access1$Data + PPLCV1$Data + Pub_Assist1$Data + Snap_Ind$Data + Snap_HH$Data + Unbanked_Households$Data + Uninsured_Adults$Data + 
+                        Uninsured_All$Data + Uninsured_Child$Data + Arrest_VF$Data + Arrest_NVF$Data + Arrest_M$Data + CANI1$Data + Unemploy_Teen1$Data + 
+                        Unemploy_Youth1$Data)
+summary(model_attempt20)
+Unemploy_Youth1$Data     -5.796e+00  3.571e+00  -1.623   0.1058
+
+#Attempting Plots
+
+plot(x=Life_Expectancy_Attempt$Data, y=MonthlyRent2kAttempt$Data)
+^not very helpful in explaining anything
+plot(x=LifeExpect1$Data, y=Poverty2$Data)
 
 
+"Call:
+lm(formula = LifeExpect1$Data ~ IDR2$Data + Poverty2$Data + MRent_500$Data + 
+    MRent_999$Data + MRent_1k$Data + MRent_1500k$Data + MRent_2k$Data + 
+    UnER1$Data + Educ_nohs$Data + Educ_SC$Data + Educ_AD$Data + 
+    Educ_BD$Data + ConPov1$Data + Graduation_Rate$Data + Home_Own1$Data + 
+    HH_Inc_100k$Data + HH_Inc_15k$Data + HH_Inc_200k$Data + HH_Inc_25k$Data + 
+    HH_Inc_50k$Data + HH_Inc_75k$Data + HH_Inc_Under15k$Data + 
+    Internet_Access1$Data + PPLCV1$Data + Pub_Assist1$Data + 
+    Snap_Ind$Data + Snap_HH$Data + Unbanked_Households$Data + 
+    Uninsured_Adults$Data + Uninsured_All$Data + Uninsured_Child$Data + 
+    Arrest_VF$Data + Arrest_NVF$Data + Arrest_M$Data + CANI1$Data + 
+    Unemploy_Teen1$Data + Unemploy_Youth1$Data)
 
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.9731 -1.6366  0.0211  1.7653  6.0471 
 
+Coefficients:
+                           Estimate Std. Error t value Pr(>|t|)    
+(Intercept)               8.146e+01  2.105e+00  38.691   <2e-16 ***
+IDR2$Data                -7.624e-02  1.943e-01  -0.392   0.6950    
+Poverty2$Data             1.061e-08  1.488e-06   0.007   0.9943    
+MRent_500$Data            2.292e-05  7.066e-05   0.324   0.7459    
+MRent_999$Data            4.249e-05  8.833e-05   0.481   0.6309    
+MRent_1k$Data            -2.314e-05  6.124e-05  -0.378   0.7059    
+MRent_1500k$Data         -2.528e-05  8.074e-05  -0.313   0.7544    
+MRent_2k$Data             9.074e-05  3.166e-05   2.866   0.0045 ** 
+UnER1$Data                1.152e+01  6.344e+00   1.816   0.0706 .  
+Educ_nohs$Data           -2.477e-05  1.897e-05  -1.305   0.1929    
+Educ_SC$Data              3.488e-05  4.324e-05   0.807   0.4206    
+Educ_AD$Data              1.472e-05  8.919e-05   0.165   0.8690    
+Educ_BD$Data             -5.331e-06  6.706e-06  -0.795   0.4274    
+ConPov1$Data             -1.087e-04  1.322e-04  -0.822   0.4118    
+Graduation_Rate$Data     -4.946e-01  1.458e+00  -0.339   0.7346    
+Home_Own1$Data            1.739e+00  1.139e+00   1.526   0.1282    
+HH_Inc_100k$Data          1.923e-05  7.472e-05   0.257   0.7971    
+HH_Inc_15k$Data          -9.868e-05  1.622e-04  -0.608   0.5435    
+HH_Inc_200k$Data          3.123e-05  5.834e-05   0.535   0.5929    
+HH_Inc_25k$Data           3.430e-04  1.770e-04   1.938   0.0537 .  
+HH_Inc_50k$Data          -2.566e-04  1.212e-04  -2.118   0.0351 *  
+HH_Inc_75k$Data           1.470e-04  1.412e-04   1.042   0.2985    
+HH_Inc_Under15k$Data      1.168e-04  1.070e-04   1.092   0.2758    
+Internet_Access1$Data     2.241e-06  4.067e-05   0.055   0.9561    
+PPLCV1$Data               1.483e-04  2.760e-04   0.537   0.5915    
+Pub_Assist1$Data         -2.419e+00  6.880e+00  -0.352   0.7254    
+Snap_Ind$Data             8.170e-06  3.466e-05   0.236   0.8139    
+Snap_HH$Data             -3.004e-05  6.729e-05  -0.446   0.6557    
+Unbanked_Households$Data  8.462e+00  5.333e+00   1.587   0.1138    
+Uninsured_Adults$Data     1.025e+02  4.825e+01   2.124   0.0346 *  
+Uninsured_All$Data       -1.397e+02  6.131e+01  -2.279   0.0235 *  
+Uninsured_Child$Data      3.063e+01  1.586e+01   1.932   0.0545 .  
+Arrest_VF$Data           -1.067e-04  1.544e-03  -0.069   0.9450    
+Arrest_NVF$Data           3.330e-04  2.857e-04   1.165   0.2449    
+Arrest_M$Data             1.880e-05  1.570e-04   0.120   0.9048    
+CANI1$Data               -9.257e-04  5.647e-04  -1.639   0.1024    
+Unemploy_Teen1$Data      -1.666e+00  1.302e+00  -1.279   0.2019    
+Unemploy_Youth1$Data     -5.796e+00  3.571e+00  -1.623   0.1058    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.621 on 262 degrees of freedom
+Multiple R-squared:  0.2387,	Adjusted R-squared:  0.1312 
+F-statistic:  2.22 on 37 and 262 DF,  p-value: 0.000163"
+
+#Interpreting:
+###
+MRent_2k$Data             9.074e-05  3.166e-05   2.866   0.0045 **
+  For every increase in the number of people paying above 2k rent monthly, everything else held constant, 
+the life expectancy would can be expected to change by .0009074.  
+
+####
+For every increase in the number of people uninsured, everything else held constant, the life expectancy
+can be expected to decrease by 0.000397. 
 
 
