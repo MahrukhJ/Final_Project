@@ -1,37 +1,5 @@
 Mahrukh Jaura
-Final Project Draft (for now)
-
-Life expectancy at birth indicates the number of years a newborn infant would live if prevailing 
-patterns of mortality at the time of its birth were to stay the same throughout its life.
-
-I think it would be interesting to investigate the relationship between income and life expectancy and 
-examining the factors that can lead to an increase or decrease in life expectancy.
-'Introduction:'
-Life expectancy has increased significantly over the past centuries. This paper will study the impact of 
-income inequality on life expectancy along with observing other variables that may play a significant factor. 
-
-One of the first studies that established a relationship between income inequality and life expectancy 
-measured the level, temporal trend, and geographical variability in the association between income and 
-life expectancy while identifying factors related to small area variation within the association. 
-After evaluating factors associated with differences in life expectancy and estimating said expectancy by 
-household income percentile, sex & geographic area, the study found that higher income was associated with 
-higher life expectancy throughout the income distribution.
-  
-'Literature Review:'
-A notable study that established the relationship between income and life expectancy written in 2016 by Chetty et al., 
-The Association Between Income and Life Expectancy in the United States, 2001 – 2014, measured the level, temporal trend, 
-and geographical variability in the association between income and life expectancy while identifying factors related to 
-small area variation within the association. Income data for the U.S. population was obtained from 1.4 billion de-identified
-tax records from 1999-2014; mortality data obtained through the Social Security Administration death records. With the objective 
-of evaluating factors associated with differences in life expectancy and estimating said expectancy by household income percentile, 
-sex & geographic area, the study found that higher income was associated with higher life expectancy throughout the income distribution. 
-Inequality in life expectancy increased over time, life expectancy for low-income individuals was positively correlated with the local 
-area fraction of immigrants, college graduates & local government expenditures and geographic differences in life expectancy for 
-individuals in the lowest income quartile were significantly correlated with smoking but not significantly correlated with access to 
-medical care, labor market conditions or income inequality. 
-
-'Data:'
-
+Final Project Draft 
 
 attach(dat3)
 table(dat3$INCOME2, dat3$EDUCA)
@@ -57,12 +25,6 @@ Less than $35,000 ($25,000 to less than $35,000)       6529     14764 17254  755
 Less than $50,000 ($35,000 to less than $50,000)       9980     21660 20466  7164  2048
 Less than $75,000 ($50,000 to less than $75,000)      12730     26041 19701  5214  1423
 $75,000 or more                                       32377     48988 27428  5648  1298
-
-I wanted to base my project around NYC and compare boroughs but the datasets are not that geographically detailed so 
-following the contents of lab 3 and employing k-nn techniques of machine learning to try to guess people’s neighborhoods, 
-I decided to replicate that and predict the borough someone lives in based on acs2017_ny and brfss data, since acs2017_ny 
-includes stuff like housing cost, hours worked per week, total family income, poverty status, etc. and the brfss data incorporates
-a myriad of health-related variables. 
 
 
 "The income diversity ratio is a single value meant to represent the variability in the distribution of income in a geography. In this instance CCC uses an 80:20 ratio, which compares income at the 80th percentile (the upper limit of the fourth quintile) with income at the 20th percentile (the upper limit of the bottom quintile)"
@@ -2037,6 +1999,79 @@ summary(Gini_Coeff$`2017`)
 mean(Physicians_1k$`2017`, trim = 0, na.rm = FALSE)
 sd(Physicians_1k$`2017`)
 summary(Physicians_1k$`2017`)
+
+#####Possible Ridge Regression Code#####
+y <- Combined_Data_for_Final_Project$`Life Expectancy 2017`
+attach(Combined_Data_for_Final_Project)
+x <- data.matrix(Combined_Data_for_Final_Project[c('Health Expenditure 2017', 'GDP per Capita 2017', 'Total Population 2017', 'Poverty Headcount at 1.9', 'Education Expenditure 2017', 'Primary School Enrollment Ratio 2017', 'Gini Coefficient 2017', 'Physicians per 1000 - 2017')])
+install.packages("glmnet")
+library(glmnet)
+model <- glmnet(x, y, alpha = 0)
+summary(model)
+" Length Class     Mode   
+a0        100    -none-    numeric
+beta      800    dgCMatrix S4     
+df        100    -none-    numeric
+dim         2    -none-    numeric
+lambda    100    -none-    numeric
+dev.ratio 100    -none-    numeric
+nulldev     1    -none-    numeric
+npasses     1    -none-    numeric
+jerr        1    -none-    numeric
+offset      1    -none-    logical
+call        4    -none-    call   
+nobs        1    -none-    numeric"
+#Choose an optimal value for lambda
+#perform k-fold cross-validation to find optimal lambda value
+cv_model <- cv.glmnet(x, y, alpha = 0)
+#find optimal lambda value that minimizes test MSE
+best_lambda <- cv_model$lambda.min
+best_lambda
+"0.9973521"
+plot(cv_model) 
+
+#we can analyze the final model produced by the optimal lambda value.
+#find coefficients of best model
+best_model <- glmnet(x, y, alpha = 0, lambda = best_lambda)
+coef(best_model)
+"9 x 1 sparse Matrix of class "dgCMatrix"
+                                                s0
+(Intercept)                           6.532607e+01
+Health Expenditure 2017               8.969194e-01
+GDP per Capita 2017                   4.823093e-01
+Total Population 2017                -1.588833e-10
+Poverty Headcount at 1.9              .           
+Education Expenditure 2017            .           
+Primary School Enrollment Ratio 2017  .           
+Gini Coefficient 2017                 .           
+Physicians per 1000 - 2017            . "
+
+#find coefficients of best model
+best_model <- glmnet(x, y, alpha = 1, lambda = best_lambda)
+coef(best_model)
+"9 x 1 sparse Matrix of class "dgCMatrix"
+                                             s0
+(Intercept)                          67.5895917
+Health Expenditure 2017               0.6403937
+GDP per Capita 2017                   0.1842568
+Total Population 2017                 .        
+Poverty Headcount at 1.9              .        
+Education Expenditure 2017            .        
+Primary School Enrollment Ratio 2017  .        
+Gini Coefficient 2017                 .        
+Physicians per 1000 - 2017            .        "
+#produce Ridge trace plot
+plot(model, xvar = "lambda")
+
+#use fitted best model to make predictions
+y_predicted <- predict(model, s = best_lambda, newx = x)
+#find SST and SSE
+sst <- sum((y - mean(y))^2)
+sse <- sum((y_predicted - y)^2)
+#find R-Squared
+rsq <- 1 - sse/sst
+rsq
+[1] 0.164179
 
 
 
