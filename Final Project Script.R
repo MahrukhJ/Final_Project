@@ -31,8 +31,7 @@ individuals in the lowest income quartile were significantly correlated with smo
 medical care, labor market conditions or income inequality. 
 
 'Data:'
-I am using the BRFSS2013 data downloaded from the class page. The data includes information on education, income, and various factors regarding health, which 
-are all relevant to my project. 
+
 
 attach(dat3)
 table(dat3$INCOME2, dat3$EDUCA)
@@ -1399,14 +1398,653 @@ Residual standard error: 2.621 on 262 degrees of freedom
 Multiple R-squared:  0.2387,	Adjusted R-squared:  0.1312 
 F-statistic:  2.22 on 37 and 262 DF,  p-value: 0.000163"
 
+model_attempt25 <- lm(LifeExpect1$Data ~ IDR2$Data + Poverty2$Data + MRent_500$Data + MRent_999$Data + MRent_1k$Data + MRent_1500k$Data + MRent_2k$Data + 
+                        UnER1$Data + Educ_nohs$Data + Educ_SC$Data + Educ_AD$Data + Educ_BD$Data + ConPov1$Data + Graduation_Rate$Data + 
+                        HH_Inc_100k$Data + HH_Inc_15k$Data + HH_Inc_200k$Data + HH_Inc_25k$Data + HH_Inc_50k$Data + HH_Inc_75k$Data + HH_Inc_Under15k$Data 
+                       + PPLCV1$Data + Pub_Assist1$Data + Snap_HH$Data + Uninsured_Adults$Data + 
+                        Uninsured_All$Data + Uninsured_Child$Data + Unemploy_Teen1$Data + 
+                        Unemploy_Youth1$Data)
+summary(model_attempt25)
+
 #Interpreting:
 ###
-MRent_2k$Data             9.074e-05  3.166e-05   2.866   0.0045 **
-  For every increase in the number of people paying above 2k rent monthly, everything else held constant, 
+For every increase in the number of people paying above 2k rent monthly, everything else held constant, 
 the life expectancy would can be expected to change by .0009074.  
 
 ####
 For every increase in the number of people uninsured, everything else held constant, the life expectancy
 can be expected to decrease by 0.000397. 
+
+#------------------------------Starting Again!!!!!------------------------------
+ 
+Eliminating the following countries and territories for missing data: 'out of the 269'
+#Aruba
+#Channel Islands
+#Eritrea
+#New Caledonia
+#Korea, Dem. People's Rep
+#French Polynesia
+#South Sudan
+#Syrian Arab Republic
+#Venezuela, RB
+#Virgin Islands, U.S.
+#Yemen, Rep.
+
+Andorra
+American Samoa
+Bermuda
+Curacao
+Cayman Islands
+Dominica
+Faroe Islands
+Gibraltar
+Greenland
+Isle of Man
+St. Kitts and Nevis
+Liechtenstein
+St.Martin (French Part)
+Monaco
+Marshall Islands
+Northern Mariana Islands
+Nauru
+Palau
+West Bank and Gaza
+San Marino
+Serbia
+Sint Maarten (Dutch Part)
+Seychelles
+Turks and Caicos Islands
+Tuvalu
+British Virgin Islands
+Kosova
+Guam
+Hong Kong, SAR China
+Libya
+Puerto Rico
+Somalia
+
+
+Life Expectancy/GDP Per Capita/
+
+clean up population, health expenditure, education expenditure, 
+
+detach()
+attach(LIFE_EXPECTANCY_5_years)
+
+model1 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017`)
+summary(model1)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017`)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-28.417  -4.095   1.874   5.467  13.122 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                65.5062     1.3968  46.898  < 2e-16 ***
+HEALTH_EXPENDITURE$`2017`   1.0112     0.1962   5.154 6.58e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.156 on 183 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.1267,	Adjusted R-squared:  0.122 
+F-statistic: 26.56 on 1 and 183 DF,  p-value: 6.584e-07"
+
+suppressMessages(require(stargazer))
+stargazer(model1, type = "text")
+"===============================================
+                        Dependent variable:    
+                    ---------------------------
+                              `2017`           
+-----------------------------------------------
+`2017`                       1.011***          
+                              (0.196)          
+                                               
+Constant                     65.506***         
+                              (1.397)          
+                                               
+-----------------------------------------------
+Observations                    185            
+R2                             0.127           
+Adjusted R2                    0.122           
+Residual Std. Error      7.156 (df = 183)      
+F Statistic           26.559*** (df = 1; 183)  
+===============================================
+Note:               *p<0.1; **p<0.05; ***p<0.01"
+
+plot(x=LIFE_EXPECTANCY_5_years$`2017`,y=HEALTH_EXPENDITURE$`2017`)
+title("Comparison of Life Expectancy & Health Expenditure")
+abline(lm(HEALTH_EXPENDITURE$`2017` ~ LIFE_EXPECTANCY_5_years$`2017`), col = "red")
+
+model2 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017`)
+summary(model2)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017`)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-28.467  -3.984   1.684   5.098  15.008 
+
+Coefficients:
+                          Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                64.4137     1.4180  45.427  < 2e-16 ***
+HEALTH_EXPENDITURE$`2017`   1.0146     0.1922   5.278 3.69e-07 ***
+GDP_Per_Capita$`2017`       0.5449     0.1852   2.942  0.00369 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.011 on 182 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.1664,	Adjusted R-squared:  0.1572 
+F-statistic: 18.16 on 2 and 182 DF,  p-value: 6.434e-08"
+
+plot(x=LIFE_EXPECTANCY_5_years$`2017`,y=GDP_Per_Capita$`2017`)
+title("Comparison of Life Expectancy & GDP Per Capita")
+
+model3 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`))
+summary(model3)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-28.706  -3.907   1.454   5.136  14.829 
+
+Coefficients:
+                             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                   67.7930     4.0746  16.638  < 2e-16 ***
+HEALTH_EXPENDITURE$`2017`      1.0313     0.1933   5.336 2.82e-07 ***
+GDP_Per_Capita$`2017`          0.5531     0.1856   2.980  0.00327 ** 
+log(TOTAL_POPULATION$`2017`)  -0.2168     0.2451  -0.885  0.37748    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.015 on 181 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:   0.17,	Adjusted R-squared:  0.1562 
+F-statistic: 12.35 on 3 and 181 DF,  p-value: 2.174e-07"
+
+model4 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + 
+               Poverty_Headcount_at_1_9$`2017`)
+summary(model4)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + Poverty_Headcount_at_1_9$`2017`)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-14.939  -2.050   0.614   2.384   7.487 
+
+Coefficients:
+                                Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                     72.42723    4.14714  17.464  < 2e-16 ***
+HEALTH_EXPENDITURE$`2017`        0.95419    0.19251   4.956 4.92e-06 ***
+GDP_Per_Capita$`2017`            0.33463    0.22094   1.515    0.134    
+log(TOTAL_POPULATION$`2017`)    -0.18962    0.23012  -0.824    0.413    
+Poverty_Headcount_at_1_9$`2017` -0.33132    0.04939  -6.709 4.47e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.782 on 69 degrees of freedom
+  (112 observations deleted due to missingness)
+Multiple R-squared:  0.6069,	Adjusted R-squared:  0.5841 
+F-statistic: 26.63 on 4 and 69 DF,  p-value: 2.244e-13"
+
+plot(x=LIFE_EXPECTANCY_5_years$`2017`,y=log(Poverty_Headcount_at_1_9$`2017`))
+title("Comparison of Life Expectancy & Poverty Headcount at $1.9")
+
+model5 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + 
+               Poverty_Headcount_at_1_9$`2017` + EDUC_EXPENDITURE$`2017`)
+summary(model5)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + Poverty_Headcount_at_1_9$`2017` + 
+    EDUC_EXPENDITURE$`2017`)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15.4741  -1.8286   0.7089   1.9275   7.9821 
+
+Coefficients:
+                                 Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                     70.173201   5.060576  13.867  < 2e-16 ***
+HEALTH_EXPENDITURE$`2017`        1.137790   0.229309   4.962 5.91e-06 ***
+GDP_Per_Capita$`2017`            0.341407   0.233966   1.459    0.150    
+log(TOTAL_POPULATION$`2017`)    -0.124702   0.245492  -0.508    0.613    
+Poverty_Headcount_at_1_9$`2017` -0.318441   0.053037  -6.004 1.15e-07 ***
+EDUC_EXPENDITURE$`2017`         -0.008116   0.118996  -0.068    0.946    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.858 on 61 degrees of freedom
+  (119 observations deleted due to missingness)
+Multiple R-squared:  0.6253,	Adjusted R-squared:  0.5946 
+F-statistic: 20.36 on 5 and 61 DF,  p-value: 6.806e-12"
+
+model6 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + 
+               Poverty_Headcount_at_1_9$`2017` + EDUC_EXPENDITURE$`2017` + School_Enrollment_Primary_$`2017`)
+summary(model6)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + Poverty_Headcount_at_1_9$`2017` + 
+    EDUC_EXPENDITURE$`2017` + School_Enrollment_Primary_$`2017`)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-14.3645  -1.8032   0.6069   2.1320   6.9655 
+
+Coefficients:
+                                  Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                       86.04464    8.30627  10.359 1.02e-14 ***
+HEALTH_EXPENDITURE$`2017`          1.10567    0.24572   4.500 3.40e-05 ***
+GDP_Per_Capita$`2017`             -0.04661    0.27252  -0.171   0.8648    
+log(TOTAL_POPULATION$`2017`)      -0.11220    0.24395  -0.460   0.6473    
+Poverty_Headcount_at_1_9$`2017`   -0.37034    0.05499  -6.735 8.78e-09 ***
+EDUC_EXPENDITURE$`2017`            0.03730    0.11987   0.311   0.7568    
+School_Enrollment_Primary_$`2017` -0.14612    0.07179  -2.035   0.0465 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.742 on 57 degrees of freedom
+  (122 observations deleted due to missingness)
+Multiple R-squared:  0.6526,	Adjusted R-squared:  0.616 
+F-statistic: 17.85 on 6 and 57 DF,  p-value: 1.628e-11"
+
+Gini_Coeff <- API_SI_POV_GINI_DS2_en_excel_v2_3358977
+
+model7 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + 
+               Poverty_Headcount_at_1_9$`2017` + EDUC_EXPENDITURE$`2017` + School_Enrollment_Primary_$`2017` + Gini_Coeff$`2017`)
+summary(model7)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + Poverty_Headcount_at_1_9$`2017` + 
+    EDUC_EXPENDITURE$`2017` + School_Enrollment_Primary_$`2017` + 
+    Gini_Coeff$`2017`)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-14.1776  -1.8076   0.5444   2.4707   7.1179 
+
+Coefficients:
+                                  Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                       86.66804    9.42239   9.198 2.06e-12 ***
+HEALTH_EXPENDITURE$`2017`          1.11071    0.26392   4.209 0.000104 ***
+GDP_Per_Capita$`2017`             -0.07513    0.30220  -0.249 0.804659    
+log(TOTAL_POPULATION$`2017`)      -0.04737    0.33477  -0.141 0.888036    
+Poverty_Headcount_at_1_9$`2017`   -0.36442    0.06703  -5.436 1.54e-06 ***
+EDUC_EXPENDITURE$`2017`            0.06392    0.13491   0.474 0.637638    
+School_Enrollment_Primary_$`2017` -0.15054    0.07615  -1.977 0.053488 .  
+Gini_Coeff$`2017`                 -0.04320    0.08579  -0.504 0.616719    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.938 on 51 degrees of freedom
+  (127 observations deleted due to missingness)
+Multiple R-squared:  0.6144,	Adjusted R-squared:  0.5614 
+F-statistic: 11.61 on 7 and 51 DF,  p-value: 1.025e-08"
+
+Physicians_1k <- API_SH_MED_PHYS_ZS_DS2_en_excel_v2_3360190
+
+model8 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + 
+               Poverty_Headcount_at_1_9$`2017` + EDUC_EXPENDITURE$`2017` + School_Enrollment_Primary_$`2017` + Gini_Coeff$`2017` + 
+               Physicians_1k$`2017`)
+summary(model8)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017` + log(TOTAL_POPULATION$`2017`) + Poverty_Headcount_at_1_9$`2017` + 
+    EDUC_EXPENDITURE$`2017` + School_Enrollment_Primary_$`2017` + 
+    Gini_Coeff$`2017` + Physicians_1k$`2017`)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-4.781 -1.898  0.053  1.252  7.522 
+
+Coefficients:
+                                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                       103.85641   10.49869   9.892 2.95e-11 ***
+HEALTH_EXPENDITURE$`2017`           0.78256    0.31289   2.501 0.017694 *  
+GDP_Per_Capita$`2017`              -0.88943    0.27813  -3.198 0.003113 ** 
+log(TOTAL_POPULATION$`2017`)       -0.38188    0.35505  -1.076 0.290163    
+Poverty_Headcount_at_1_9$`2017`    -0.35896    0.09145  -3.925 0.000432 ***
+EDUC_EXPENDITURE$`2017`            -0.11978    0.13800  -0.868 0.391869    
+School_Enrollment_Primary_$`2017`  -0.21405    0.09664  -2.215 0.034012 *  
+Gini_Coeff$`2017`                   0.02404    0.09733   0.247 0.806492    
+Physicians_1k$`2017`                0.13421    0.52896   0.254 0.801334    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.883 on 32 degrees of freedom
+  (145 observations deleted due to missingness)
+Multiple R-squared:  0.7317,	Adjusted R-squared:  0.6647 
+F-statistic: 10.91 on 8 and 32 DF,  p-value: 2.916e-07"
+
+plot(x=LIFE_EXPECTANCY_5_years$`2017`,y=GDP_Per_Capita$`2017`)
+title("Comparison of Life Expectancy & GDP Per Capita")
+abline(lm(GDP_Per_Capita$`2017` ~ LIFE_EXPECTANCY_5_years$`2017`), col = "red")
+
+plot(x=LIFE_EXPECTANCY_5_years$`2017`,y=Poverty_Headcount_at_1_9$`2017`)
+title("Comparison of Life Expectancy & Poverty Headcount at 1.9")
+abline(lm(Poverty_Headcount_at_1_9$`2017` ~ LIFE_EXPECTANCY_5_years$`2017`), col = "red")
+
+plot(x=LIFE_EXPECTANCY_5_years$`2017`,y=School_Enrollment_Primary_$`2017`)
+title("ComparingLife Expectancy & Primary School Completion Rate")
+abline(lm(School_Enrollment_Primary_$`2017` ~ LIFE_EXPECTANCY_5_years$`2017`), col = "red")
+
+suppressMessages(require(stargazer))
+stargazer(model8, type = "text")
+"===============================================
+                        Dependent variable:    
+                    ---------------------------
+                              `2017`           
+-----------------------------------------------
+`2017`                        0.783**          
+                              (0.313)          
+                                               
+`2017`                       -0.889***         
+                              (0.278)          
+                                               
+`2017`)                       -0.382           
+                              (0.355)          
+                                               
+`2017`                       -0.359***         
+                              (0.091)          
+                                               
+`2017`                        -0.120           
+                              (0.138)          
+                                               
+`2017`                       -0.214**          
+                              (0.097)          
+                                               
+`2017`                         0.024           
+                              (0.097)          
+                                               
+`2017`                         0.134           
+                              (0.529)          
+                                               
+Constant                    103.856***         
+                             (10.499)          
+                                               
+-----------------------------------------------
+Observations                    41             
+R2                             0.732           
+Adjusted R2                    0.665           
+Residual Std. Error       2.883 (df = 32)      
+F Statistic           10.910*** (df = 8; 32)   
+===============================================
+Note:               *p<0.1; **p<0.05; ***p<0.01"
+
+model10 <- lm(LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + GDP_Per_Capita$`2017` + Poverty_Headcount_at_1_9$`2017` + School_Enrollment_Primary_$`2017`)
+summary(model10)
+"Call:
+lm(formula = LIFE_EXPECTANCY_5_years$`2017` ~ HEALTH_EXPENDITURE$`2017` + 
+    GDP_Per_Capita$`2017` + Poverty_Headcount_at_1_9$`2017` + 
+    School_Enrollment_Primary_$`2017`)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-13.6215  -1.7935   0.2572   2.1847   7.0317 
+
+Coefficients:
+                                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                       83.491441   7.165456  11.652  < 2e-16 ***
+HEALTH_EXPENDITURE$`2017`          0.870650   0.200688   4.338 5.03e-05 ***
+GDP_Per_Capita$`2017`              0.002858   0.255700   0.011   0.9911    
+Poverty_Headcount_at_1_9$`2017`   -0.374792   0.050614  -7.405 3.07e-10 ***
+School_Enrollment_Primary_$`2017` -0.119999   0.065840  -1.823   0.0729 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.685 on 66 degrees of freedom
+  (115 observations deleted due to missingness)
+Multiple R-squared:  0.6242,	Adjusted R-squared:  0.6014 
+F-statistic: 27.41 on 4 and 66 DF,  p-value: 2.034e-13"
+
+suppressMessages(require(stargazer))
+stargazer(model10, type = "text")
+"===============================================
+                        Dependent variable:    
+                    ---------------------------
+                              `2017`           
+-----------------------------------------------
+`2017`                       0.871***          
+                              (0.201)          
+                                               
+`2017`                         0.003           
+                              (0.256)          
+                                               
+`2017`                       -0.375***         
+                              (0.051)          
+                                               
+`2017`                        -0.120*          
+                              (0.066)          
+                                               
+Constant                     83.491***         
+                              (7.165)          
+                                               
+-----------------------------------------------
+Observations                    71             
+R2                             0.624           
+Adjusted R2                    0.601           
+Residual Std. Error       3.685 (df = 66)      
+F Statistic           27.405*** (df = 4; 66)   
+===============================================
+Note:               *p<0.1; **p<0.05; ***p<0.01"
+
+
+d1 <- data.frame(Physicians_1k$`2017`)
+d2 <- data.frame(Gini_Coeff$`2017`)
+cbind(d1,d2)
+d3 <- data.frame(School_Enrollment_Primary_$`2017`)
+d4 <- data.frame(EDUC_EXPENDITURE$`2017`)
+d5 <- data.frame(Poverty_Headcount_at_1_9$`2017`)
+d6 <- data.frame(log(TOTAL_POPULATION$`2017`))
+d7 <- data.frame(GDP_Per_Capita$`2017`)
+d8 <- data.frame(HEALTH_EXPENDITURE$`2017`)
+cbind(d1,d2,d3,d4,d5,d6,d7,d8)
+x <- data.frame(cbind(d1,d2,d3,d4,d5,d6,d7,d8))
+cor(x, method = "pearson", use = "complete.obs")
+"                                 Physicians_1k..2017. Gini_Coeff..2017.
+Physicians_1k..2017.                        1.00000000        -0.4357240
+Gini_Coeff..2017.                          -0.43572397         1.0000000
+School_Enrollment_Primary_..2017.          -0.09277571         0.3393098
+EDUC_EXPENDITURE..2017.                    -0.52316903         0.5316740
+Poverty_Headcount_at_1_9..2017.            -0.49620665         0.5663392
+log.TOTAL_POPULATION..2017..               -0.15584959         0.1276372
+GDP_Per_Capita..2017.                       0.06080307        -0.3208351
+HEALTH_EXPENDITURE..2017.                   0.53868009        -0.1600401
+                                  School_Enrollment_Primary_..2017. EDUC_EXPENDITURE..2017.
+Physicians_1k..2017.                                    -0.09277571              -0.5231690
+Gini_Coeff..2017.                                        0.33930977               0.5316740
+School_Enrollment_Primary_..2017.                        1.00000000               0.2545817
+EDUC_EXPENDITURE..2017.                                  0.25458166               1.0000000
+Poverty_Headcount_at_1_9..2017.                         -0.05647337               0.2822756
+log.TOTAL_POPULATION..2017..                             0.27448835              -0.1451513
+GDP_Per_Capita..2017.                                   -0.43577564              -0.1489424
+HEALTH_EXPENDITURE..2017.                                0.16978748              -0.2189416
+                                  Poverty_Headcount_at_1_9..2017. log.TOTAL_POPULATION..2017..
+Physicians_1k..2017.                                  -0.49620665                   -0.1558496
+Gini_Coeff..2017.                                      0.56633917                    0.1276372
+School_Enrollment_Primary_..2017.                     -0.05647337                    0.2744884
+EDUC_EXPENDITURE..2017.                                0.28227559                   -0.1451513
+Poverty_Headcount_at_1_9..2017.                        1.00000000                   -0.1723011
+log.TOTAL_POPULATION..2017..                          -0.17230111                    1.0000000
+GDP_Per_Capita..2017.                                 -0.07106176                   -0.1529253
+HEALTH_EXPENDITURE..2017.                             -0.21701253                    0.1502410
+                                  GDP_Per_Capita..2017. HEALTH_EXPENDITURE..2017.
+Physicians_1k..2017.                         0.06080307                 0.5386801
+Gini_Coeff..2017.                           -0.32083508                -0.1600401
+School_Enrollment_Primary_..2017.           -0.43577564                 0.1697875
+EDUC_EXPENDITURE..2017.                     -0.14894240                -0.2189416
+Poverty_Headcount_at_1_9..2017.             -0.07106176                -0.2170125
+log.TOTAL_POPULATION..2017..                -0.15292529                 0.1502410
+GDP_Per_Capita..2017.                        1.00000000                -0.3957456
+HEALTH_EXPENDITURE..2017.                   -0.39574561                 1.0000000"
+
+install.packages("Hmisc")
+library("Hmisc")
+res2 <- rcorr(as.matrix(x))
+res2
+" Physicians_1k..2017. Gini_Coeff..2017.
+Physicians_1k..2017.                              1.00             -0.44
+Gini_Coeff..2017.                                -0.44              1.00
+School_Enrollment_Primary_..2017.                -0.19              0.01
+EDUC_EXPENDITURE..2017.                          -0.41              0.41
+Poverty_Headcount_at_1_9..2017.                  -0.48              0.45
+log.TOTAL_POPULATION..2017..                     -0.11              0.11
+GDP_Per_Capita..2017.                             0.20             -0.23
+HEALTH_EXPENDITURE..2017.                         0.59             -0.11
+                                  School_Enrollment_Primary_..2017. EDUC_EXPENDITURE..2017.
+Physicians_1k..2017.                                          -0.19                   -0.41
+Gini_Coeff..2017.                                              0.01                    0.41
+School_Enrollment_Primary_..2017.                              1.00                    0.21
+EDUC_EXPENDITURE..2017.                                        0.21                    1.00
+Poverty_Headcount_at_1_9..2017.                               -0.16                    0.35
+log.TOTAL_POPULATION..2017..                                  -0.01                    0.01
+GDP_Per_Capita..2017.                                         -0.07                    0.09
+HEALTH_EXPENDITURE..2017.                                      0.09                   -0.07
+                                  Poverty_Headcount_at_1_9..2017. log.TOTAL_POPULATION..2017..
+Physicians_1k..2017.                                        -0.48                        -0.11
+Gini_Coeff..2017.                                            0.45                         0.11
+School_Enrollment_Primary_..2017.                           -0.16                        -0.01
+EDUC_EXPENDITURE..2017.                                      0.35                         0.01
+Poverty_Headcount_at_1_9..2017.                              1.00                         0.05
+log.TOTAL_POPULATION..2017..                                 0.05                         1.00
+GDP_Per_Capita..2017.                                       -0.21                         0.04
+HEALTH_EXPENDITURE..2017.                                   -0.26                         0.10
+                                  GDP_Per_Capita..2017. HEALTH_EXPENDITURE..2017.
+Physicians_1k..2017.                               0.20                      0.59
+Gini_Coeff..2017.                                 -0.23                     -0.11
+School_Enrollment_Primary_..2017.                 -0.07                      0.09
+EDUC_EXPENDITURE..2017.                            0.09                     -0.07
+Poverty_Headcount_at_1_9..2017.                   -0.21                     -0.26
+log.TOTAL_POPULATION..2017..                       0.04                      0.10
+GDP_Per_Capita..2017.                              1.00                     -0.01
+HEALTH_EXPENDITURE..2017.                         -0.01                      1.00
+
+n
+                                  Physicians_1k..2017. Gini_Coeff..2017.
+Physicians_1k..2017.                               115                47
+Gini_Coeff..2017.                                   47                69
+School_Enrollment_Primary_..2017.                  101                66
+EDUC_EXPENDITURE..2017.                             98                62
+Poverty_Headcount_at_1_9..2017.                     52                69
+log.TOTAL_POPULATION..2017..                       115                69
+GDP_Per_Capita..2017.                              115                69
+HEALTH_EXPENDITURE..2017.                          115                69
+                                  School_Enrollment_Primary_..2017. EDUC_EXPENDITURE..2017.
+Physicians_1k..2017.                                            101                      98
+Gini_Coeff..2017.                                                66                      62
+School_Enrollment_Primary_..2017.                               153                     127
+EDUC_EXPENDITURE..2017.                                         127                     155
+Poverty_Headcount_at_1_9..2017.                                  71                      67
+log.TOTAL_POPULATION..2017..                                    153                     155
+GDP_Per_Capita..2017.                                           153                     155
+HEALTH_EXPENDITURE..2017.                                       152                     155
+                                  Poverty_Headcount_at_1_9..2017. log.TOTAL_POPULATION..2017..
+Physicians_1k..2017.                                           52                          115
+Gini_Coeff..2017.                                              69                           69
+School_Enrollment_Primary_..2017.                              71                          153
+EDUC_EXPENDITURE..2017.                                        67                          155
+Poverty_Headcount_at_1_9..2017.                                74                           74
+log.TOTAL_POPULATION..2017..                                   74                          186
+GDP_Per_Capita..2017.                                          74                          186
+HEALTH_EXPENDITURE..2017.                                      74                          185
+                                  GDP_Per_Capita..2017. HEALTH_EXPENDITURE..2017.
+Physicians_1k..2017.                                115                       115
+Gini_Coeff..2017.                                    69                        69
+School_Enrollment_Primary_..2017.                   153                       152
+EDUC_EXPENDITURE..2017.                             155                       155
+Poverty_Headcount_at_1_9..2017.                      74                        74
+log.TOTAL_POPULATION..2017..                        186                       185
+GDP_Per_Capita..2017.                               186                       185
+HEALTH_EXPENDITURE..2017.                           185                       185
+
+P
+                                  Physicians_1k..2017. Gini_Coeff..2017.
+Physicians_1k..2017.                                   0.0019           
+Gini_Coeff..2017.                 0.0019                                
+School_Enrollment_Primary_..2017. 0.0514               0.9207           
+EDUC_EXPENDITURE..2017.           0.0000               0.0010           
+Poverty_Headcount_at_1_9..2017.   0.0003               0.0001           
+log.TOTAL_POPULATION..2017..      0.2554               0.3638           
+GDP_Per_Capita..2017.             0.0358               0.0535           
+HEALTH_EXPENDITURE..2017.         0.0000               0.3600           
+                                  School_Enrollment_Primary_..2017. EDUC_EXPENDITURE..2017.
+Physicians_1k..2017.              0.0514                            0.0000                 
+Gini_Coeff..2017.                 0.9207                            0.0010                 
+School_Enrollment_Primary_..2017.                                   0.0197                 
+EDUC_EXPENDITURE..2017.           0.0197                                                   
+Poverty_Headcount_at_1_9..2017.   0.1839                            0.0036                 
+log.TOTAL_POPULATION..2017..      0.8686                            0.9441                 
+GDP_Per_Capita..2017.             0.4031                            0.2766                 
+HEALTH_EXPENDITURE..2017.         0.2772                            0.3734                 
+                                  Poverty_Headcount_at_1_9..2017. log.TOTAL_POPULATION..2017..
+Physicians_1k..2017.              0.0003                          0.2554                      
+Gini_Coeff..2017.                 0.0001                          0.3638                      
+School_Enrollment_Primary_..2017. 0.1839                          0.8686                      
+EDUC_EXPENDITURE..2017.           0.0036                          0.9441                      
+Poverty_Headcount_at_1_9..2017.                                   0.6777                      
+log.TOTAL_POPULATION..2017..      0.6777                                                      
+GDP_Per_Capita..2017.             0.0724                          0.5717                      
+HEALTH_EXPENDITURE..2017.         0.0240                          0.1899                      
+                                  GDP_Per_Capita..2017. HEALTH_EXPENDITURE..2017.
+Physicians_1k..2017.              0.0358                0.0000                   
+Gini_Coeff..2017.                 0.0535                0.3600                   
+School_Enrollment_Primary_..2017. 0.4031                0.2772                   
+EDUC_EXPENDITURE..2017.           0.2766                0.3734                   
+Poverty_Headcount_at_1_9..2017.   0.0724                0.0240                   
+log.TOTAL_POPULATION..2017..      0.5717                0.1899                   
+GDP_Per_Capita..2017.                                   0.9337                   
+HEALTH_EXPENDITURE..2017.         0.9337"
+
+
+mean(LIFE_EXPECTANCY_5_years$`2017`, trim = 0, na.rm = FALSE)
+sd(LIFE_EXPECTANCY_5_years$`2017`)
+summary(LIFE_EXPECTANCY_5_years$`2017`)
+
+mean(HEALTH_EXPENDITURE$`2017`, trim = 0, na.rm = FALSE)
+sd(HEALTH_EXPENDITURE$`2017`)
+summary(HEALTH_EXPENDITURE$`2017`)
+
+mean(GDP_Per_Capita$`2017`, trim = 0, na.rm = FALSE)
+sd(GDP_Per_Capita$`2017`)
+summary(GDP_Per_Capita$`2017`)
+
+mean(log(TOTAL_POPULATION$`2017`), trim = 0, na.rm = FALSE)
+sd(log(TOTAL_POPULATION$`2017`))
+summary(log(TOTAL_POPULATION$`2017`))
+
+mean(Poverty_Headcount_at_1_9$`2017`, trim = 0, na.rm = FALSE)
+sd(Poverty_Headcount_at_1_9$`2017`)
+summary(Poverty_Headcount_at_1_9$`2017`)
+
+mean( EDUC_EXPENDITURE$`2017`, trim = 0, na.rm = FALSE)
+sd( EDUC_EXPENDITURE$`2017`)
+summary( EDUC_EXPENDITURE$`2017`)
+
+mean(School_Enrollment_Primary_$`2017`, trim = 0, na.rm = FALSE)
+sd(School_Enrollment_Primary_$`2017`)
+summary(School_Enrollment_Primary_$`2017`)
+
+mean(Gini_Coeff$`2017`, trim = 0, na.rm = FALSE)
+sd(Gini_Coeff$`2017`)
+summary(Gini_Coeff$`2017`)
+
+mean(Physicians_1k$`2017`, trim = 0, na.rm = FALSE)
+sd(Physicians_1k$`2017`)
+summary(Physicians_1k$`2017`)
+
+
+
+
+
+
+
+
+
 
 
